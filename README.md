@@ -1,8 +1,13 @@
-# 🏥 MediSlot – Doctor Appointment Booking System
+#  MediSlot – Doctor Appointment Booking System
 
 MediSlot is a full-stack web application that enables users to browse doctors, book appointments, and manage schedules efficiently with secure authentication and role-based access.
 
-## 🚀 Features
+##  Live Demo
+
+-  **User App:** https://medislot-frontend-gxaf.onrender.com  
+-  **Admin / Doctor Panel:** https://medislot-admin-xmsv.onrender.com  
+
+##  Features
 - User Authentication (Login / Signup)
 - Browse Doctors by Specialization
 - Book & Manage Appointments
@@ -11,12 +16,12 @@ MediSlot is a full-stack web application that enables users to browse doctors, b
 - Razorpay Payment Integration
 - Responsive UI
 
-## 🛠️ Tech Stack
+##  Tech Stack
 - Frontend: React.js, Tailwind CSS  
 - Backend: Node.js, Express.js  
 - Database: MongoDB  
 
-## ⚙️ Setup
+##  Setup
 
 ```bash
 git clone https://github.com/Ajeesh6/MediSlot.git
@@ -33,7 +38,7 @@ cd ../backend && npm install
 
 Create `.env` files in the following folders:
 
-### 📁 Backend (`/backend/.env`)
+###  Backend (`/backend/.env`)
 ```
 MONGO_URI=your_mongodb_connection_string
 CLOUDINARY_NAME=your_cloudinary_name
@@ -46,18 +51,18 @@ RAZORPAY_KEY_ID=your_key
 RAZORPAY_KEY_SECRET=your_secret
 ```
 
-### 📁 Frontend (`/frontend/.env`)
+###  Frontend (`/frontend/.env`)
 ```
 VITE_BACKEND_URL=http://localhost:4000
 VITE_RAZORPAY_KEY_ID=your_key
 ```
 
-### 📁 Admin (`/admin/.env`)
+###  Admin (`/admin/.env`)
 ```
 VITE_BACKEND_URL=http://localhost:4000
 ```
 
-### ▶️ Run the Application
+###  Run the Application
 
 Open **3 terminals** and run each service:
 
