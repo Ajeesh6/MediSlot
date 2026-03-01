@@ -18,6 +18,7 @@ const Appointment = () => {
   const [docSlots, setDocSlots] = useState([])
   const [slotIndex, setSlotIndex] = useState(0)
   const [slotTime, setSlotTime] = useState('')
+  const [isBooking, setIsBooking] = useState(false)
 
   const fetchDocInfo = async () => {
     const docInfo = doctors.find(doc => doc._id === docId)
@@ -80,12 +81,21 @@ const Appointment = () => {
   }
 
   const bookAppointment = async () => {
+
+    if (isBooking) return  // prevent multiple clicks
+
     if (!token) {
       toast.warn('Login to book appointment')
       return navigate('/login')
     }
 
+    if (!slotTime) {
+      toast.warn('Select a time slot')
+      return
+    }
+
     try {
+      setIsBooking(true) //  start loading
 
       const date = docSlots[slotIndex][0].datetime
 
@@ -95,7 +105,12 @@ const Appointment = () => {
 
       const slotDate = day + "_" + month + "_" + year
 
-      const { data } = await axios.post(backendUrl + '/api/user/book-appointment', { docId, slotDate, slotTime }, { headers: { token } })
+      const { data } = await axios.post(
+        backendUrl + '/api/user/book-appointment',
+        { docId, slotDate, slotTime },
+        { headers: { token } }
+      )
+
       if (data.success) {
         toast.success(data.message)
         getDoctorsData()
@@ -105,9 +120,11 @@ const Appointment = () => {
       }
 
     } catch (error) {
-      console.log(error);
+      console.log(error)
       toast.error(error.message)
 
+    } finally {
+      setIsBooking(false) //  stop loading
     }
   }
 
@@ -158,7 +175,11 @@ const Appointment = () => {
         <div className='flex gap-3 items-center w-full overflow-x-scroll mt-4'>
           {
             docSlots.length && docSlots.map((item, index) => (
-              <div onClick={() => setSlotIndex(index)} className={`text-center py-6 min-w-16 rounded-full cursor-pointer ${slotIndex === index ? 'bg-primary text-white' : 'border border-gray-200'}`} key={index}>
+              <div onClick={() => {
+                setSlotIndex(index)
+                setSlotTime('')
+              }}
+                className={`text-center py-6 min-w-16 rounded-full cursor-pointer ${slotIndex === index ? 'bg-primary text-white' : 'border border-gray-200'}`} key={index}>
                 <p>{item[0] && daysOfWeek[item[0].datetime.getDay()]}</p>
                 <p>{item[0] && item[0].datetime.getDate()}</p>
               </div>
@@ -174,7 +195,21 @@ const Appointment = () => {
           ))}
         </div>
 
-        <button onClick={bookAppointment} className='bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6'>Book an appointment</button>
+        <button
+          onClick={bookAppointment}
+          disabled={isBooking}
+          className={`flex items-center justify-center gap-2 px-14 py-3 rounded-full my-6 text-sm font-light
+              ${isBooking ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary text-white'}
+                   `}>
+          {isBooking ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              Booking...
+            </>
+          ) : (
+            'Book an appointment'
+          )}
+        </button>
 
       </div>
 
